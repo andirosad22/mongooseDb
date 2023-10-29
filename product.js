@@ -50,6 +50,13 @@ const productSchema = mongoose.Schema({
     }
 })
 
+productSchema.methods.outstock = function () {  
+    this.stock = 0;
+    this.avaibility.online =false;
+    this.avaibility.offline = false;
+    return this.save();
+}
+
 const Product = mongoose.model('Product', productSchema);
 
 // const tshirt = new Product({
@@ -72,20 +79,29 @@ const Product = mongoose.model('Product', productSchema);
 //     console.log(err);
 // });
 
-Product.findOneAndUpdate({name: "T Shirt Raglan"}, {
-    name: 'T Shirt Raglan',
-    brand: "Hollister",
-    price: 500000,
-    color: "biru muda",
-    size: ["S", "M", "L"],
-    conditon: "baru",
-    stock: -25,
-    avaibility: {
-        online: true,
-        offline: true
-    }
-}, {new:true, runValidators:true}).then((result)=>{
-    console.log(result);
-}).catch((err)=>{
-    console.log(err.errors.stock.properties.message); //menampilkan error dari properties message
-});
+const changeStock = async (id)=>{
+    const foundProduct = await Product.findById(id);
+    await foundProduct.outstock();
+
+    console.log('Berhasil diubah');
+}
+
+changeStock('653e76c107fdc0cd74c0b8c6');
+
+// Product.findOneAndUpdate({name: "T Shirt Raglan"}, {
+//     name: 'T Shirt Raglan',
+//     brand: "Hollister",
+//     price: 500000,
+//     color: "biru muda",
+//     size: ["S", "M", "L"],
+//     conditon: "baru",
+//     stock: -25,
+//     avaibility: {
+//         online: true,
+//         offline: true
+//     }
+// }, {new:true, runValidators:true}).then((result)=>{
+//     console.log(result);
+// }).catch((err)=>{
+//     console.log(err.errors.stock.properties.message); //menampilkan error dari properties message
+// });
