@@ -52,10 +52,40 @@ const productSchema = mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
-const tshirt = new Product({name: 'T Shirt Raglan', price: 50000});
+// const tshirt = new Product({
+//     name: 'T Shirt Raglan',
+//     brand: "Hollister",
+//     price: 50000,
+//     color: "biru muda",
+//     size: ["S", "M", "L"],
+//     conditon: "baru",
+//     stock: 25,
+//     avaibility: {
+//         online: true,
+//         offline: true
+//     }
+// });
 
-tshirt.save().then((result) => {
+// tshirt.save().then((result) => {
+//     console.log(result);
+// }).catch((err) => {
+//     console.log(err);
+// });
+
+Product.findOneAndUpdate({name: "T Shirt Raglan"}, {
+    name: 'T Shirt Raglan',
+    brand: "Hollister",
+    price: -500000,
+    color: "biru muda",
+    size: ["S", "M", "L"],
+    conditon: "baru",
+    stock: -25,
+    avaibility: {
+        online: true,
+        offline: true
+    }
+}, {new:true, runValidators:true}).then((result)=>{
     console.log(result);
-}).catch((err) => {
+}).catch((err)=>{
     console.log(err);
 });
