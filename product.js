@@ -17,7 +17,7 @@ const productSchema = mongoose.Schema({
     price: {
         type: Number,
         required : true,
-        min: 0
+        min: [0, 'Nilai tidak boleh minus']
     },
     color:{
         type: String,
@@ -36,7 +36,7 @@ const productSchema = mongoose.Schema({
     stock: {
         type: Number,
         required: true,
-        min: 0
+        min: [0, 'Nilai tidak boleh minus'] //menambahkan message error
     },
     avaibility:{
         online: {
@@ -75,7 +75,7 @@ const Product = mongoose.model('Product', productSchema);
 Product.findOneAndUpdate({name: "T Shirt Raglan"}, {
     name: 'T Shirt Raglan',
     brand: "Hollister",
-    price: -500000,
+    price: 500000,
     color: "biru muda",
     size: ["S", "M", "L"],
     conditon: "baru",
@@ -87,5 +87,5 @@ Product.findOneAndUpdate({name: "T Shirt Raglan"}, {
 }, {new:true, runValidators:true}).then((result)=>{
     console.log(result);
 }).catch((err)=>{
-    console.log(err);
+    console.log(err.errors.stock.properties.message); //menampilkan error dari properties message
 });
